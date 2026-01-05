@@ -33,6 +33,13 @@ a{
 }
 a:hover{color:var(--ink);text-decoration:underline}
 
+.pdf-link::after{
+  content:"↗";
+  font-size:.7em;
+  margin-left:6px;
+  opacity:.6;
+}
+
 /* views */
 .view{
   position:absolute;
@@ -296,20 +303,30 @@ section{
 <div id="arrangements" class="view">
   <button class="back" onclick="goHome()"></button>
   <section class="simple-list">
-    <div><strong>radiohead</strong> — <em>motion picture soundtrack</em></div>
-    <div><strong>joni mitchell</strong> — <em>a case of you</em></div>
-    <div><strong>bill evans</strong> — <em>waltz for debby</em></div>
-  </section>
+  <div>
+    <a class="pdf-link" href="scores/arrangements/pure-imagination-lead-sheet.pdf" target="_blank">
+      <strong>bricusse/newley</strong> — <em>pure imagination</em>
+    </a>
+  </div>
+</section>
 </div>
 
 <!-- LESSONS -->
 <div id="lessons" class="view">
   <button class="back" onclick="goHome()"></button>
   <section class="simple-list">
-    <div>voicing concepts for solo piano</div>
-    <div>rhythmic displacement studies</div>
-    <div>scale passage treatments</div>
-  </section>
+  <div>
+    <a class="pdf-link" href="scores/lessons/chromatic-scale-with-aug-or-dim7-chord.pdf" target="_blank">
+      chromatic scale against augmented or diminished 7th chord (3:4 polyrhythm exercise)
+    </a>
+  </div>
+
+  <div>
+    <a class="pdf-link" href="scores/lessons/lydian-dominant-exploration-no-1.pdf" target="_blank">
+      lydian dominant exploration no. 1
+    </a>
+  </div>
+</section>
   <div class="schedule-booking">
     for all lesson inquiries contact
     <a href="mailto:lessons@travisfisherpiano.com">lessons@travisfisherpiano.com</a>
@@ -492,7 +509,7 @@ dl.onclick=()=>downloadFile(`songs/${t}.mp3`);
     scoreSlot.style.width='48px';
 
     try{
-      const r=await fetch(`scores/${t}.pdf`,{method:'HEAD'});
+      const r=await fetch(`scores/compositions/${t}.pdf`,{method:'HEAD'});
       if(r.ok){
         const s=document.createElement('button');
         s.className='score-btn';
@@ -520,7 +537,7 @@ function downloadFile(url){
 async function openScore(title){
   document.querySelectorAll('.back').forEach(b=>b.style.display='none');
   scoreGallery.innerHTML='';
-  const pdf=await pdfjsLib.getDocument(`scores/${title}.pdf`).promise;
+  const pdf=await pdfjsLib.getDocument(`scores/compositions/${title}.pdf`).promise;
   for(let i=1;i<=pdf.numPages;i++){
     const page=await pdf.getPage(i);
     const vp=page.getViewport({scale:1.6});
