@@ -5,83 +5,266 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>travis fisher</title>
 
+<link rel="icon" type="image/png" href="images/background-icon.png">
+<link rel="apple-touch-icon" href="images/background-icon.png">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <style>
-:root{--bg:#0f0f0f;--ink:#f3efe8;--muted:#bdb8ae}
+:root{
+  --bg:#0f0f0f;
+  --ink:#f3efe8;
+  --muted:#bdb8ae;
+}
+
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;overflow-x:hidden}
 
-.view{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .5s ease}
-.view.active{opacity:1;pointer-events:auto}
-
-/* SCHEDULE STYLING */
-.event{
-  margin-bottom:40px;
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
 }
 
-.event strong{
-  display:block;
-  font-size:1.05rem;
-  margin-bottom:6px;
-}
-
-.event .time{
-  font-size:0.9rem;
+a{
   color:var(--muted);
-  margin-bottom:6px;
+  text-decoration:none;
+}
+a:hover{color:var(--ink);text-decoration:underline}
+
+/* views */
+.view{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .5s ease;
+}
+.view.active{
+  opacity:1;
+  pointer-events:auto;
 }
 
-.event .details{
-  font-size:0.95rem;
-}
-
-.event .with{
-  font-size:0.85rem;
-  color:var(--muted);
-}
-
-/* HOME */
+/* home */
 .home{display:flex;align-items:center;overflow:hidden}
-.home-inner{padding:24px;transition:transform .6s ease,opacity .6s ease}
+.home-inner{padding:24px;transition:.6s}
 .home-inner.hidden{transform:translateX(-60px);opacity:0}
-.name{margin-bottom:10px;color:var(--muted);font-size:1.2rem}
-.subtitle{margin-bottom:80px;color:var(--muted);font-size:0.8rem}
-.menu{display:flex;flex-direction:column;gap:18px}
-.menu button{background:none;border:none;color:var(--ink);font-size:1.1rem;text-align:left;cursor:pointer}
 
-/* SECTION */
-.back{position:fixed;top:20px;left:20px;background:none;border:none;color:var(--ink);font-size:1.3rem;cursor:pointer;z-index:20}
+@keyframes logoHue{
+  from{filter:hue-rotate(0deg)}
+  to{filter:hue-rotate(360deg)}
+}
+.logo{
+  width: clamp(40px, 24vw, 80px);
+  margin-bottom: 20px;
+  animation: logoHue 20s linear infinite;
+  filter:saturate(85%)
+}
+
+.name{font-size:1.05rem;color:var(--muted);margin-bottom:4px}
+.subtitle{font-size:.8rem;color:var(--muted);margin-bottom:64px}
+
+.menu{display:flex;flex-direction:column;gap:16px}
+.menu button{
+  background:none;border:none;color:var(--ink);
+  font-size:1.05rem;text-align:left;cursor:pointer;
+}
+
+/* back */
+.back{
+  position:fixed;top:18px;left:18px;
+  background:none;border:none;color:var(--ink);
+  font-size:1.3rem;cursor:pointer;z-index:20;
+}
 .back::before{content:"←"}
-section{max-width:760px;padding:140px 24px 100px}
 
-/* COMPOSITIONS */
-.composition{margin-bottom:42px}
-.controls{display:flex;gap:18px;margin-top:10px}
+section{
+  max-width:760px;
+  padding:120px 24px 80px;
+}
+
+/* compositions */
+#compositions{overflow-y:auto}
+
+.composition{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:.88rem;
+  margin-bottom:22px;
+}
+
+
+
+.composition.playing .composition-title{
+  font-style: italic;
+  color: hsla(190, 50%, 50%, 0.9); /* soft, desaturated cyan */
+  animation: titlePulse 9s ease-in-out infinite, logoHue 40s linear infinite;
+}
+
+@keyframes titlePulse{
+  0%,100%{opacity:.7}
+  50%{opacity:1}
+  
+}
+
+.composition-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:210px;        /* FIXED WIDTH = alignment */
+  justify-content:flex-end;
+}
+
 .play{background:none;border:none;cursor:pointer;color:var(--ink)}
-.play svg{width:22px;height:22px}
+.play svg{width:18px;height:18px}
 .play .triangle{fill:none;stroke:currentColor;stroke-width:2}
 .play.playing .triangle{fill:currentColor;stroke:none}
-.score-btn{background:none;border:1px solid var(--muted);color:var(--ink);padding:6px 12px;cursor:pointer}
 
-/* SCORE */
-.score-overlay{position:fixed;inset:0;background:rgba(15,15,15,.96);opacity:0;pointer-events:none;transition:opacity .4s ease;z-index:30}
-.score-overlay.active{opacity:1;pointer-events:auto}
-.score-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--ink);font-size:1.4rem;cursor:pointer;z-index:40}
-.score-gallery{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:32px;padding:72px 24px 24px;overflow-x:auto;scroll-snap-type:x mandatory}
-.score-page{scroll-snap-align:center;display:flex;justify-content:center}
-.score-page canvas{max-width:100vw;height:auto;touch-action:pan-x pinch-zoom}
-@media(min-width:900px){.score-gallery{align-items:flex-start}.score-page canvas{max-height:calc(100vh - 120px);width:auto}}
+.seek{
+  width:90px;height:5px;background:#333;
+  border-radius:2px;overflow:hidden;cursor:pointer;
+}
+.seek-fill{
+  height:100%;width:0%;
+  animation:logoHue 20s linear infinite;
+  background:hsla(190, 50%, 50%, 0.9);
+}
 
-/* ABOUT */
+.score-btn{
+  width:48px;               /* RESERVED SPACE */
+  text-align:center;
+  background:none;
+  border:1px solid var(--muted);
+  color:var(--ink);
+  font-size:.75rem;
+  padding:3px 0;
+}
+
+/* hide scrollbar visually */
+#compositions::-webkit-scrollbar,
+.schedule-events::-webkit-scrollbar{
+  width:0;height:0;
+}
+
+/* score overlay */
+.score-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(15,15,15,.96);
+  opacity:0;
+  pointer-events:none;
+  transition:.4s;
+  z-index:30;
+}
+.score-overlay.active{
+  opacity:1;
+  pointer-events:auto;
+}
+.score-close{
+  position:absolute;top:16px;right:16px;
+  background:none;border:none;
+  color:var(--ink);font-size:1.4rem;cursor:pointer;
+  z-index: 40;
+}
+
+.score-overlay.closing{
+  opacity:0;
+  pointer-events:none;
+}
+.score-gallery{
+  position:absolute;inset:0;
+  display:flex;gap:32px;
+  padding:72px 24px 24px;
+  overflow-x:auto;scroll-snap-type:x mandatory;
+}
+.score-page{scroll-snap-align:center}
+.score-page canvas{max-width:100vw;height:auto}
+
+/* schedule */
+.schedule-wrap{
+  position:relative;
+  height:100%;
+}
+.schedule-events{
+  position:absolute;
+  top:120px;
+  bottom:64px;
+  left:0;right:0;
+  overflow-y:auto;
+  padding:0 24px;
+}
+.event{margin-bottom:36px}
+.event strong{display:block;font-size:1rem;margin-bottom:4px}
+.event .time{font-size:.85rem;color:var(--muted);margin-bottom:4px}
+.event .with{font-size:.8rem;color:var(--muted)}
+
+.schedule-booking{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:14px 24px;
+  font-size:.75rem;
+  color:var(--muted);
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+/* about */
+#about{overflow:hidden}
 .about-wrap{position:relative;min-height:100vh;display:flex;align-items:center}
-.about-track{position:absolute;inset:0;display:flex;width:400%;height:100vh;animation:pan 45s linear infinite}
-.about-img{width:100%;height:100vh;background:url('images/about-background.jpg') left center/cover no-repeat}
-.about-img.mirror{transform:scaleX(-1)}
-.about-text{position:relative;z-index:2;max-width:720px;padding:180px 24px 0}
-@keyframes pan{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+.about-track{
+  position:absolute;inset:0;
+  width:2000%;height:100vh;
+  background:url('images/about-background.jpg') left center/cover no-repeat;
+  animation:aboutPan 20s linear infinite;
+  opacity:.6;
+}
+@keyframes aboutPan{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+.about-text{
+  position:relative;z-index:2;
+  max-width:500px;
+  padding:180px 24px 0;
+}
 
-@media(max-width:600px){.menu button{font-size:1rem}}
+/* simple lists */
+.simple-list{font-size:.85rem;line-height:1.6}
+.simple-list div{margin-bottom:10px}
+
+
+@media (min-width: 1000px){
+  .composition{
+    justify-content:space-between;
+  }
+
+  .controls{
+    width:560px;
+    justify-content:flex-start;
+    gap:14px;
+  }
+
+  .seek{
+    width:420px;
+    height:5px;
+  }
+
+  .about-track{
+  position:absolute;inset:0;
+  width:500%;height:100vh;
+  background:url('images/about-background.jpg') left center/cover no-repeat;
+  animation:aboutPan 30s linear infinite;
+  opacity:.6;
+}
+}
+
 </style>
 </head>
 <body>
@@ -89,68 +272,104 @@ section{max-width:760px;padding:140px 24px 100px}
 <!-- HOME -->
 <div id="home" class="view active home">
   <div id="homeInner" class="home-inner">
+    <img class="logo" src="images/background-icon.png">
     <div class="name">travis fisher</div>
     <div class="subtitle">pianist / composer</div>
     <div class="menu">
       <button onclick="openSection('compositions')">compositions</button>
+      <button onclick="openSection('arrangements')">arrangements</button>
+      <button onclick="openSection('lessons')">lessons</button>
       <button onclick="openSection('schedule')">schedule</button>
+      <button onclick="openSection('donate')">donate</button>
       <button onclick="openSection('about')">about</button>
     </div>
   </div>
 </div>
 
 <!-- COMPOSITIONS -->
-<div id="compositions" class="view" style="overflow-y:auto">
+<div id="compositions" class="view">
   <button class="back" onclick="goHome()"></button>
   <section id="compositionList"></section>
+</div>
+
+<!-- ARRANGEMENTS -->
+<div id="arrangements" class="view">
+  <button class="back" onclick="goHome()"></button>
+  <section class="simple-list">
+    <div><strong>radiohead</strong> — <em>motion picture soundtrack</em></div>
+    <div><strong>joni mitchell</strong> — <em>a case of you</em></div>
+    <div><strong>bill evans</strong> — <em>waltz for debby</em></div>
+  </section>
+</div>
+
+<!-- LESSONS -->
+<div id="lessons" class="view">
+  <button class="back" onclick="goHome()"></button>
+  <section class="simple-list">
+    <div>voicing concepts for solo piano</div>
+    <div>rhythmic displacement studies</div>
+    <div>scale passage treatments</div>
+  </section>
+  <div class="schedule-booking">
+    for all lesson inquiries contact
+    <a href="mailto:lessons@travisfisherpiano.com">lessons@travisfisherpiano.com</a>
+  </div>
 </div>
 
 <!-- SCHEDULE -->
 <div id="schedule" class="view">
   <button class="back" onclick="goHome()"></button>
-  <section>
-    <p style="margin-bottom:32px">for booking inquiries contact <a href="mailto:booking@travisfisherpiano.com" style="color:var(--ink)">booking@travisfisherpiano.com</a></p>
-    <div class="event">
-  <strong>jan 5</strong>
-  <div class="time">12–4pm</div>
-  <div class="details">
-    jazz at mountain village core
-    <div class="with">with danny d'allesandro</div>
+  <div class="schedule-wrap">
+    <div class="schedule-events">
+      <div class="event">
+        <strong>jan 5</strong>
+        <div class="time">12–4pm</div>
+        jazz at mountain village core
+        <div class="with">with danny d’allesandro</div>
+      </div>
+      <div class="event">
+        <strong>jan 8</strong>
+        <div class="time">6–9pm</div>
+        jazz at the view at mtn lodge
+        <div class="with">with danny d’allesandro</div>
+      </div>
+      <div class="event">
+        <strong>jan 15</strong>
+        <div class="time">6–7pm</div>
+        telluride chamber music concert at norwood livery
+        <div class="with">with danny desantis and steve white</div>
+      </div>
+    </div>
+    <div class="schedule-booking">
+      booking inquiries:
+      <a href="mailto:booking@travisfisherpiano.com">booking@travisfisherpiano.com</a>
+    </div>
   </div>
 </div>
 
-<div class="event">
-  <strong>jan 8</strong>
-  <div class="time">6-9pm</div>
-  <div class="details">
-    jazz at the view at mtn lodge
-    <div class="with">with danny d'allesandro</div>
-  </div>
-</div>
-
-<div class="event">
-  <strong>jan 15</strong>
-  <div class="time">5-7pm</div>
-  <div class="details">
-    telluride chamber music classical concert at norwood livery
-    <div class="with">with danny desantis and steve white</div>
-  </div>
-</div>
+<!-- DONATE -->
+<div id="donate" class="view">
+  <button class="back" onclick="goHome()"></button>
+  <section style="font-size:.85rem;line-height:1.7">
+    <p>
+      if you find the scores, recordings, or materials here valuable,
+      any donation is sincerely appreciated
+    </p>
+    <p>
+      <a href="https://venmo.com/travisafish" target="_blank">donate via venmo</a>
+    </p>
   </section>
 </div>
 
 <!-- ABOUT -->
-<div id="about" class="view" style="overflow:hidden">
+<div id="about" class="view">
   <button class="back" onclick="goHome()"></button>
   <div class="about-wrap">
     <div class="about-text">
       <p>travis grew up in the high desert of california</p>
       <p>he studied classical piano in los angeles, jazz piano in seattle, and is based now in telluride, colorado</p>
     </div>
-    <div class="about-track">
-      <div class="about-img"></div>
-      <div class="about-img mirror"></div>
-    </div>
+    <div class="about-track"></div>
   </div>
 </div>
 
@@ -161,46 +380,171 @@ section{max-width:760px;padding:140px 24px 100px}
 </div>
 
 <script>
-pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-let currentAudio=null,currentBtn=null;const playState={};
+pdfjsLib.GlobalWorkerOptions.workerSrc=
+'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const scoreOverlay = document.getElementById('scoreOverlay');
+const scoreGallery = document.getElementById('scoreGallery');
+const home = document.getElementById('home');
+const homeInner = document.getElementById('homeInner');
+
+let currentAudio=null,currentBtn=null;
+const playState={};
 
 function openSection(id){
-  document.getElementById('homeInner').classList.add('hidden');
-  setTimeout(()=>{document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active')},500)
+  homeInner.classList.add('hidden');
+  setTimeout(()=>{
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  },500);
 }
-function goHome(){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('home').classList.add('active');document.getElementById('homeInner').classList.remove('hidden')}
+function goHome(){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  home.classList.add('active');
+  homeInner.classList.remove('hidden');
+}
 
 function togglePlay(btn,src,key){
-  if(currentAudio&&currentBtn!==btn){playState[currentBtn.dataset.key]=currentAudio.currentTime;currentAudio.pause();currentBtn.classList.remove('playing')}
-  if(!btn.classList.contains('playing')){currentAudio=new Audio(src);currentAudio.currentTime=playState[key]||0;currentAudio.play();btn.classList.add('playing');currentBtn=btn}else{playState[key]=currentAudio.currentTime;currentAudio.pause();btn.classList.remove('playing')}
+  if(currentAudio && currentBtn !== btn){
+  playState[currentBtn.dataset.key] = currentAudio.currentTime;
+  currentAudio.pause();
+  currentBtn.classList.remove('playing');
+  currentBtn.closest('.composition').classList.remove('playing');
+}
+  if(!btn.classList.contains('playing')){
+    currentAudio=new Audio(src);
+    currentAudio.currentTime=playState[key]||0;
+    currentAudio.volume=.85;
+    currentAudio.play();
+    btn.classList.add('playing');
+    btn.closest('.composition').classList.add('playing');
+    currentBtn=btn;
+
+    currentAudio.ontimeupdate=()=>{
+      const fill=btn.parentElement.querySelector('.seek-fill');
+      if(fill) fill.style.width=
+        (currentAudio.currentTime/currentAudio.duration*100)+'%';
+    };
+    currentAudio.onended=()=>{
+      btn.classList.remove('playing');
+      playState[key]=0;
+      btn.closest('.composition').classList.remove('playing');
+      btn.closest('.composition')
+        .nextElementSibling?.querySelector('.play')?.click();
+    };
+  }else{
+    playState[key]=currentAudio.currentTime;
+    currentAudio.pause();
+    btn.classList.remove('playing');
+    btn.closest('.composition').classList.remove('playing');
+  }
 }
 
 async function buildCompositions(){
-  const titles=['microrecia','hypnostadia','liminetica','nyxophonia','katharia','kyklopalma','aphasia','interstitia','antechronia'];
+  const titles=[
+    'microrecia','hypnostadia','liminetica',
+    'nyxophonia','katharia','kyklopalma',
+    'aphasia','interstitia','antechronia'
+  ];
   const list=document.getElementById('compositionList');
-  titles.forEach(async t=>{
-    const c=document.createElement('div');c.className='composition';c.innerHTML=`<div>${t}</div><div class=controls></div>`;
-    const ctr=c.querySelector('.controls');
-    const p=document.createElement('button');p.className='play';p.dataset.key=t;p.innerHTML=`<svg viewBox='0 0 24 24'><polygon class='triangle' points='6,4 20,12 6,20'/></svg>`;
-    p.onclick=()=>togglePlay(p,`songs/${t}.mp3`,t);ctr.appendChild(p);
-    try{const r=await fetch(`scores/${t}.pdf`,{method:'HEAD'});if(r.ok){const s=document.createElement('button');s.className='score-btn';s.textContent='score';s.onclick=()=>openScore(t);ctr.appendChild(s)}}catch(e){}
-    list.appendChild(c)
-  })
+
+  for(const t of titles){
+    const c=document.createElement('div');
+    c.className='composition';
+
+    const title=document.createElement('div');
+    title.className='composition-title';
+
+   const dl=document.createElement('button');
+dl.textContent='↓';
+dl.style.background='none';
+dl.style.border='none';
+dl.style.color='var(--muted)';
+dl.style.cursor='pointer';
+dl.onclick=()=>downloadFile(`songs/${t}.mp3`);
+
+    title.append(dl,document.createTextNode(t));
+
+    const ctr=document.createElement('div');
+    ctr.className='controls';
+
+    const p=document.createElement('button');
+    p.className='play';
+    p.dataset.key=t;
+    p.innerHTML=
+      `<svg viewBox="0 0 24 24">
+        <polygon class="triangle" points="6,4 20,12 6,20"/>
+       </svg>`;
+    p.onclick=()=>togglePlay(p,`songs/${t}.mp3`,t);
+
+    const seek=document.createElement('div');
+    seek.className='seek';
+    seek.innerHTML=`<div class="seek-fill"></div>`;
+    seek.onclick=e=>{
+      if(currentAudio){
+        const r=seek.getBoundingClientRect();
+        currentAudio.currentTime=
+          ((e.clientX-r.left)/r.width)*currentAudio.duration;
+      }
+    };
+
+    const scoreSlot=document.createElement('div');
+    scoreSlot.style.width='48px';
+
+    try{
+      const r=await fetch(`scores/${t}.pdf`,{method:'HEAD'});
+      if(r.ok){
+        const s=document.createElement('button');
+        s.className='score-btn';
+        s.textContent='score';
+        s.onclick=()=>openScore(t);
+        scoreSlot.appendChild(s);
+      }
+    }catch{}
+
+    ctr.append(p,seek,scoreSlot);
+    c.append(title,ctr);
+    list.appendChild(c);
+  }
+}
+
+function downloadFile(url){
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = url.split('/').pop();
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
 
 async function openScore(title){
   document.querySelectorAll('.back').forEach(b=>b.style.display='none');
-  const gal=document.getElementById('scoreGallery');gal.innerHTML='';
+  scoreGallery.innerHTML='';
   const pdf=await pdfjsLib.getDocument(`scores/${title}.pdf`).promise;
   for(let i=1;i<=pdf.numPages;i++){
-    const page=await pdf.getPage(i);const vp=page.getViewport({scale:1.6});
-    const canvas=document.createElement('canvas');canvas.width=vp.width;canvas.height=vp.height;
+    const page=await pdf.getPage(i);
+    const vp=page.getViewport({scale:1.6});
+    const canvas=document.createElement('canvas');
+    canvas.width=vp.width;canvas.height=vp.height;
     await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;
-    const wrap=document.createElement('div');wrap.className='score-page';wrap.appendChild(canvas);gal.appendChild(wrap)
+    const wrap=document.createElement('div');
+    wrap.className='score-page';
+    wrap.appendChild(canvas);
+    scoreGallery.appendChild(wrap);
   }
-  document.getElementById('scoreOverlay').classList.add('active')
+  scoreOverlay.classList.add('active');
 }
-function closeScore(){document.getElementById('scoreOverlay').classList.remove('active');document.querySelectorAll('.back').forEach(b=>b.style.display='')}
+function closeScore(){
+  scoreOverlay.classList.add('closing');
+
+  setTimeout(()=>{
+    scoreOverlay.classList.remove('active','closing');
+    scoreGallery.innerHTML='';
+    document.querySelectorAll('.back').forEach(
+      b => b.style.display = ''
+    );
+  }, 400); // matches CSS transition
+}
 
 buildCompositions();
 </script>
