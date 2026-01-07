@@ -284,7 +284,7 @@ section{
     <div class="subtitle">pianist / composer</div>
     <div class="menu">
       <button onclick="openSection('compositions')">compositions</button>
-      <button onclick="openSection('arrangements')">arrangements</button>
+      <!-- <button onclick="openSection('arrangements')">arrangements</button> -->
       <button onclick="openSection('lessons')">lessons</button>
       <button onclick="openSection('schedule')">schedule</button>
       <button onclick="openSection('donate')">donate</button>
@@ -299,7 +299,7 @@ section{
   <section id="compositionList"></section>
 </div>
 
-<!-- ARRANGEMENTS -->
+<!-- ARRANGEMENTS
 <div id="arrangements" class="view">
   <button class="back" onclick="goHome()"></button>
   <section class="simple-list">
@@ -309,18 +309,32 @@ section{
     </a>
   </div>
 </section>
-</div>
+</div> -->
 
 <!-- LESSONS -->
 <div id="lessons" class="view">
   <button class="back" onclick="goHome()"></button>
   <section class="simple-list">
+    <div>
+    <a class="pdf-link" href="scores/lessons/the-chromatic-scale-beginner.pdf" target="_blank">
+      the chromatic scale (beginner exercise)
+    </a>
+  </div>
+   <div>
+    <a class="pdf-link" href="scores/lessons/learning-the-circle-of-fifths-beginner.pdf" target="_blank">
+      learning the circle of fifths
+    </a>
+  </div>
   <div>
     <a class="pdf-link" href="scores/lessons/chromatic-scale-with-aug-or-dim7-chord.pdf" target="_blank">
       chromatic scale against augmented or diminished 7th chord (3:4 polyrhythm exercise)
     </a>
   </div>
-
+  <div>
+    <a class="pdf-link" href="scores/lessons/dominant13th-voicings.pdf" target="_blank">
+      dominant 13th voicings
+    </a>
+  </div>
   <div>
     <a class="pdf-link" href="scores/lessons/lydian-dominant-exploration-no-1.pdf" target="_blank">
       lydian dominant exploration no. 1
@@ -339,23 +353,37 @@ section{
   <div class="schedule-wrap">
     <div class="schedule-events">
       <div class="event">
-        <strong>jan 5</strong>
-        <div class="time">12–4pm</div>
-        jazz at mountain village core
-        <div class="with">with danny d’allesandro</div>
-      </div>
-      <div class="event">
         <strong>jan 8</strong>
         <div class="time">6–9pm</div>
         jazz at the view at mtn lodge
-        <div class="with">with danny d’allesandro</div>
+        <div class="with">with danny d’alessandro (saxophone)</div>
       </div>
       <div class="event">
         <strong>jan 15</strong>
         <div class="time">6–7pm</div>
         telluride chamber music concert at norwood livery
-        <div class="with">with danny desantis and steve white</div>
+        <div class="with">with danny desantis (viola) and steve white(cello)</div>
       </div>
+      <div class="event">
+        <strong>jan 22</strong>
+        <div class="time">12-4pm</div>
+        jazz at mtn village core
+        <div class="with">with danny d’alessandro (saxophone)</div>
+      </div>
+            <div class="event">
+        <strong>feb 5</strong>
+        <div class="time">530–630pm</div>
+        telluride chamber music concert at telluride innovation center
+        <div class="with">with anneke dean (violin)</div>
+      </div>
+    
+                <div class="event">
+        <strong>mar 5</strong>
+        <div class="time">530–630pm</div>
+        telluride chamber music concert at telluride innovation center
+        <div class="with">with claire beard (flute) and mary beth mueller (violin)</div>
+      </div>
+    </div>
     </div>
     <div class="schedule-booking">
       booking inquiries:
