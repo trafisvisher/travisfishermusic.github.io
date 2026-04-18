@@ -1,0 +1,1335 @@
+    
+    
+    body {
+      background-color: #000000; 
+      overflow: hidden;
+      height: 100%;
+      margin: 0;
+    }
+
+    #rendererContain {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      margin: -8;
+      background-color: black;
+      background-size: 300px;
+    pointer-events: auto;
+}
+
+#rendererContain canvas {
+    pointer-events: auto;
+}
+    
+
+    @keyframes hueRotation {
+      0% {
+        filter: hue-rotate(0deg);
+      }
+      100% {
+        filter: hue-rotate(360deg);
+      }
+    }
+    @keyframes pulsateLess {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.01);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes pulsate {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.15);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    @keyframes pulsateMore {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.3);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* #infinityTitle {
+      animation:  pulsate 5s ease-in-out infinite alternate;
+    }
+    
+    #horseloverTitle {
+      animation: pulsate 6s ease-in-out infinite alternate;
+    }
+    
+    #maapTitle {
+      animation:  pulsate 4s ease-in-out infinite alternate;
+    }
+    
+    #maasTitle {
+      animation: pulsate 7s ease-in-out infinite alternate;
+    }
+    
+    #sapientsTitle {
+      animation: pulsate 3s ease-in-out infinite alternate;
+    }
+    
+    #symbioseTitle {
+      animation:  pulsate 5s ease-in-out infinite alternate;
+    }
+    
+    #braidingTitle {
+      animation: pulsate 8s ease-in-out infinite alternate;
+    }
+    
+    #luzTitle {
+      animation:  pulsate 4s ease-in-out infinite alternate;
+    }
+    
+    #inertiaTitle {
+      animation: pulsate 6s ease-in-out infinite alternate;
+    } */
+
+    #optionsDiv {
+      transition: 1s;
+      pointer-events: none;
+    }
+    /* #musicOption {
+      animation: pulsate 2.5s ease-in-out infinite alternate;
+    }
+    #imagesOption {
+      animation: pulsate 3s ease-in-out infinite alternate;
+    }
+    #wordsOption {
+      animation: pulsate 4s ease-in-out infinite alternate;
+    }
+    #hiddenOption {
+      animation: pulsate 5s ease-in-out infinite alternate;
+    }
+    #aboutOption {
+      animation: pulsate 3.5s ease-in-out infinite alternate;
+    }
+    #doodlesOption {
+      animation: pulsate 4s ease-in-out infinite alternate;
+    }
+    #balkanOption {
+      animation: pulsate 5s ease-in-out infinite alternate;
+    }
+    #sonnetsOption {
+      animation: pulsate 7s ease-in-out infinite alternate;
+    } */
+
+    #musicOptionsDiv {  
+      display:none
+    }
+    #wordsOptionsDiv {  
+      display:none
+    }
+
+    #doodlesDiv {  
+      display:none
+    }
+    /* #doodlesDiv img {  
+      animation: pulsateLess 3s ease-in-out infinite alternate
+    } */
+    #sonnetsDiv {  
+      display:none
+    }
+    /* #sonnetsDiv img {  
+      animation: pulsateLess 3s ease-in-out infinite alternate
+    } */
+    
+    #balkanDiv {  
+      display:none
+    }
+    /* #balkanDiv img {  
+      animation: pulsateLess 3s ease-in-out infinite alternate
+    } */
+
+    #aboutDiv {
+      overflow: hidden;
+    }
+
+
+
+    
+
+    #loadingScreen {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      z-index: 9999;
+  }
+  
+  .loader {
+      border: 6px solid #104647;
+      border-top: 6px solid #34db4a;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 2s linear infinite;
+  }
+  
+  
+  @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+  }
+  
+  #loadingScreen p {
+    color: white;    
+    font-family: 'Courier New', Courier, monospace;
+      margin-top: 20px;
+  }
+
+  #maapDiv {
+    display: none;
+    position: relative;
+    width: 0%;
+    height: 0%;
+    transition: 1s ease;
+
+  }
+  #maapDiv2 {
+    display: none;
+    position: relative;
+    width: 0%;
+    height: 0%;
+    transition: 1s ease;
+  }
+  #luzDiv {
+    display: none;
+    position: relative;
+    width: 0%;
+    height: 0%;
+    transition: 1s ease;
+
+  }
+  #luzDiv2 {
+    display: none;
+    position: relative;
+    width: 0%;
+    height: 0%;
+    transition: 1s ease;
+  }
+  #pianoDiv {
+    display: none;
+    position: relative;
+    width: 0%;
+    height: 0%;
+    transition: 1s ease;
+  }
+
+  #inertiaDiv {
+    display: none;
+    position: relative;
+    width: 0%;
+    height: 0%;
+    transition: 1s ease;
+
+  }
+  #inertiaDiv2 {
+    display: none;
+    position: relative;
+    width: 0%;
+    height: 0%;
+    transition: 1s ease;
+  }
+  #braidingDiv {
+    display: none;
+    position: relative;
+    width: 0%;
+    height: 0%;
+    transition: 1s ease;
+
+  }
+  #braidingDiv2 {
+    display: none;
+    position: relative;
+    width: 0%;
+    height: 0%;
+    transition: 1s ease;
+  }
+
+
+  #sapientsDiv {
+    display: none;
+    position: relative;
+    float: right;
+    width: 0%;
+    height: 0%;
+    transition: 1s ease;
+
+  }
+
+  #sapientsDiv2 {
+    display: none;
+    position: relative;
+    float: right;
+    width: 0%;
+    height: 0%;
+    transition: 1s ease;
+
+  }
+
+  #symbioseDiv {
+    display: none;
+    position: relative;
+    width: 0%;
+    height: 0%;
+    transition: 1s ease;
+  }
+  #symbioseDiv2 {
+    display: none;
+    position: relative;
+    width: 0%;
+    height: 0%;
+    transition: 1s ease;
+  }
+
+  #maasDiv {
+    display: none;
+    position: relative;
+    width: 0%;
+    height: 0%;
+    transition: 1s ease;
+  }
+  #maasDiv2 {
+    display: none;
+    position: relative;
+    width: 0%;
+    height: 0%;
+    transition: 1s ease;
+  }
+
+  #fovX{
+  cursor: pointer;
+  display: none;
+  position: absolute;
+  top: -50%;
+  }
+
+
+
+  @media (max-width:767px){
+    #fovX {
+      left: 47.5%;
+      width: 5%;
+    }
+    #pausePlay {
+      width: 10%;
+      position: absolute;
+      left: 45%;
+    }
+  }
+
+  @media (min-width:768px){
+    #fovX {
+      left: 49%;
+      width: 2%;
+    }
+    #pausePlay {
+      width: 5%;
+      position: absolute;
+      left: 47.5%;
+    }
+  }
+        
+    @media (orientation: portrait) {   
+
+      #albumDivContainer {
+        position: fixed;
+        height: 75%;
+        width: 66%;
+        transition: 0.5s;
+        top: 12.5%;
+        left: 17%;
+        transition: 1s ease
+      }
+
+      #prevDoodle, #nextDoodle, #prevBalkan, #nextBalkan, #prevHidden, #nextHidden, #prevImage, #nextImage, #prevSonnets, #nextSonnets {
+        top: 90%;
+      }    
+
+      
+
+      #topControlsNavButton {
+        position: absolute;
+        filter: invert(1);
+        right: 12.5%;
+        width: 25px;
+        opacity: 0.5;
+        visibility: hidden;
+        
+      }
+
+      #albumSelect {
+        cursor: pointer;
+        position: absolute;
+        top: -50%;
+        right: 5%;
+        width: 35px;
+        visibility: hidden;
+      }
+    
+      #centerContainer {
+        position: absolute;
+        height: 100%;
+        width: 75%;
+        transition: 0.5s;
+        top: 0%;
+        left: 12.5%;
+      }
+
+
+
+    #infinityDiv {
+      display: none;
+      position: relative;
+      width: 0%;
+      height: 0%;
+      transition: 1s ease;
+
+    }
+    #infinityDiv2 {
+      display: none;
+      position: relative;
+      width: 0%;
+      height: 0%;
+      transition: 1s ease;
+    }
+
+
+
+
+
+
+  #topControlsDiv {
+      position: relative;
+      width: 60%;
+      margin-left: 20%;
+      height: 0%;
+      top: -110%;
+      filter: contrast(200%);
+      transition: 1s;
+      visibility: hidden
+  }
+
+  
+  #presetControlsDiv {
+    width: 60%;
+    position: fixed;
+    left: 20%;
+    visibility: hidden;
+  }
+
+  #div2D3D {
+    position: relative;
+    width: 0%;
+    top: 40%;
+    transition: 1s;
+  }
+  #div2D3D img {
+    width: 50%;
+    left: 25%;
+    position: relative
+  }
+
+  #optionsDiv {
+    position: relative;
+    transition: 1s;
+    top: 33%;
+    height: 33%;
+    width: auto;
+    transition: 1s ease;
+  }
+  #optionsDiv img {
+    position: relative;
+    transition: 1s ease;
+    width: 100%;
+    height: 22.5%;
+    opacity: 0.8;   
+    
+  }
+
+  
+
+  #musicOptionsDiv {
+    position: relative;
+    transition: 1s;
+    top: 37.5%;
+    height: 25%;
+    width: auto;
+  }
+  #musicOptionsDiv img {
+    position: relative;
+    transition: 1s ease;
+    width: 100%;
+    opacity: 0.8;   
+    
+  }
+
+  #wordsOptionsDiv {
+    position: relative;
+    transition: 1s;
+    top: 33%;
+    height: 33%;
+    width: auto;
+    transition: 1s ease;
+  }
+  #wordsOptionsDiv img {
+    position: relative;
+    transition: 1s ease;
+    width: 100%;
+    opacity: 0.8;   
+    
+  }
+       
+#albumTitlesDiv {
+  display: none;
+	position: absolute;
+	height: 0%;
+	transition: 1s;
+	top: 10%;
+}
+
+
+
+
+#horseloverDiv {
+  display: none;
+  position: relative;
+  float: left;
+  width: 0%;
+  transition: 1s ease;
+  height: 33%;
+  top: 33%
+}
+#horseloverDiv2 {
+  display: none;
+  position: relative;
+  float: left;
+  width: 0%;
+  transition: 1s ease;
+  height: 33%;
+  top: 33%
+}
+
+
+#nextDoodle {
+  right: 5%;
+  border-radius: 3px 0 0 3px;
+}
+
+#prevDoodle {
+  left: 5%;
+  border-radius: 3px 0 0 3px;
+}
+
+#nextImage {
+  right: 5%;
+  border-radius: 3px 0 0 3px;
+}
+
+#prevImage {
+  left: 5%;
+  border-radius: 3px 0 0 3px;
+}
+
+#nextHidden {
+  right: 5%;
+  border-radius: 3px 0 0 3px;
+}
+
+#prevHidden {
+  left: 5%;
+  border-radius: 3px 0 0 3px;
+}
+
+
+
+#doodlesDiv {
+	height: 100vh;
+	display: none;
+	position: fixed;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: 1s ease;
+}
+#balkanDiv {
+	height: 100vh;
+	display: none;
+	position: fixed;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: 1s ease;
+}
+#sonnetsDiv {
+	height: 100vh;
+	display: none;
+	position: fixed;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: 1s ease;
+}
+
+#imagesDiv {
+  overflow: hidden;
+	height: 100vh;
+	display: none;
+	position: fixed;
+  align-items: center;
+  justify-content: center;
+}
+
+#hiddenDiv {
+  overflow: hidden;
+	height: 0%;
+	display: none;
+	position: fixed;
+  align-items: center;
+  justify-content: center;
+  transition: 1s ease;
+}
+
+
+
+
+  }
+
+  #albumDivContainer div {
+    transition: 1s;
+  }
+  
+
+
+  @media (orientation: landscape) {       
+
+    #albumDivContainer {
+      position: fixed;
+      height: 75%;
+      width: 50%;
+      transition: 0.5s;
+      top: 12.5%;
+      left: 25%;
+      transition: 1s ease
+    }
+  
+
+
+    #nextDoodle {
+      right: 5%;
+      border-radius: 3px 0 0 3px;
+    }
+  
+    #prevDoodle {
+      left: 5%;
+      border-radius: 3px 0 0 3px;
+    }
+    #nextBalkan {
+      right: 5%;
+      border-radius: 3px 0 0 3px;
+    }
+  
+    #prevBalkan {
+      left: 5%;
+      border-radius: 3px 0 0 3px;
+    }
+    #nextSonnets {
+      right: 5%;
+      border-radius: 3px 0 0 3px;
+    }
+  
+    #prevSonnets {
+      left: 5%;
+      border-radius: 3px 0 0 3px;
+    }
+
+    #nextImage {
+      right: 5%;
+      border-radius: 3px 0 0 3px;
+    }
+  
+    #prevImage {
+      left: 5%;
+      border-radius: 3px 0 0 3px;
+    }
+    #nextHidden {
+      right: 5%;
+      border-radius: 3px 0 0 3px;
+    }
+  
+    #prevHidden {
+      left: 5%;
+      border-radius: 3px 0 0 3px;
+    }
+    
+
+
+    #div2D3D {
+      position: relative;
+      width: 0%;
+      top: 40%;
+      transition: 1s;
+    }
+    #div2D3D img {
+      width: 50%;
+      left: 25%;
+      position: relative
+    }
+
+    #topControlsNavButton {
+      position: absolute;
+      filter: invert(1);
+      right: 25%;
+      width: 25px;
+      opacity: 0.5;
+      visibility: hidden;
+    }
+
+    #albumSelect {
+      cursor: pointer;
+      position: absolute;
+      top: -50%;
+      right: 2%;
+      width: 35px;
+      visibility: hidden
+    }
+    
+    #centerContainer {
+        position: absolute;
+        height: 100%;
+        width: 33%;
+        transition: 0.5s;
+        top: 0%;
+        left: 33%;
+    }
+
+
+
+  #topControlsDiv {
+      position: relative;
+      width: 30%;
+      margin-left: 35%;
+      height: 0%;
+      filter: contrast(200%);
+      top: -110%;
+      transition: 1s;
+      visibility: hidden
+  }
+
+  #presetControlsDiv {
+    width: 30%;
+    position: fixed;
+    left: 35%;
+    visibility: hidden;
+  }
+
+  #optionsDiv {
+    position: relative;
+    transition: 1s;
+    top: 25%;
+    height: 50%;
+    width: auto;
+  }
+
+  #optionsDiv img {
+    transition: 1s ease;
+    width: 100%;
+    opacity: 0.8;
+    position: relative;
+    height: 22.5%
+  }
+
+  #musicOptionsDiv {    
+    position: relative;
+    transition: 1s;
+    top: 40%;
+    height: 20%;
+    width: auto;
+  }
+
+  #musicOptionsDiv img {
+    transition: 1s ease;
+    width: 100%;
+    opacity: 0.8;
+    position: relative;
+  }
+
+  #wordsOptionsDiv {    
+    position: relative;
+    transition: 1s;
+    top: 33%;
+    height: 33%;
+    width: auto;
+    transition: 1s ease;
+  }
+
+  #wordsOptionsDiv img {
+    transition: 1s ease;
+    width: 100%;
+    opacity: 0.8;
+    position: relative;
+  }
+
+
+       
+#albumTitlesDiv {
+  display: none;
+	position: absolute;
+	height: 0%;
+	transition: 1s;
+	top: 10%;
+}
+
+#horseloverDiv {
+  display: none;
+  position: relative;
+  float: left;
+  width: 0%;
+  transition: 1s ease;
+  height: 0%;
+  top: 0%
+}
+#horseloverDiv2 {
+  display: none;
+  position: relative;
+  float: left;
+  width: 0%;
+  transition: 1s ease;
+  height: 0%;
+  top: 0%
+}
+
+#infinityDiv {
+  display: none;
+  position: relative;
+  width: 0%;
+  height: 0%;
+  transition: 1s ease;
+
+}
+#infinityDiv2 {
+  display: none;
+  position: relative;
+  width: 0%;
+  height: 0%;
+  transition: 1s ease;
+}
+
+
+#doodlesDiv {
+	height: 100%;
+	width: auto;
+	display: none;
+	position: relative;
+  align-items: center;
+  justify-content: center;
+  transition: 1s ease;
+
+}
+#balkanDiv {
+	height: 100%;
+	width: auto;
+	display: none;
+	position: relative;
+  align-items: center;
+  justify-content: center;
+  transition: 1s ease;
+
+}
+#sonnetsDiv {
+	height: 100%;
+	width: auto;
+	display: none;
+	position: relative;
+  align-items: center;
+  justify-content: center;
+  transition: 1s ease;
+
+}
+
+#hiddenDiv {
+	height: 0%;
+	width: auto;
+	display: none;
+	position: relative;
+  align-items: center;
+  justify-content: center;
+  transition: 1s ease;
+}
+
+#prevDoodle, #nextDoodle, #prevBalkan, #nextBalkan, #prevHidden, #nextHidden, #prevImage, #nextImage, #prevSonnets, #nextSonnets {
+  top: 50%;
+}    
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  #prevDoodle, #nextDoodle, #prevBalkan, #nextBalkan, #prevHidden, #nextHidden, #prevImage, #nextImage, #prevSonnets, #nextSonnets {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    width: auto;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+  }    
+ 
+  
+  .myDoodles {
+    height: 100%;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    will-change: filter;
+
+  }
+  /* .poem.inverted {
+    filter: invert(1)
+  } */
+
+  .hue-rotate-animation-black {
+    animation: hueRotateAnimationBlack 10s linear infinite, pulsate 3s ease-in-out infinite alternate; /* Animation for hue-rotate */
+  }
+  .hue-rotate-animation-black-pulsateLess {
+    animation: hueRotateAnimationBlack 10s linear infinite /* Animation for hue-rotate */
+  }
+  
+  @keyframes hueRotateAnimationBlack {
+    0% {
+      filter: invert(0) hue-rotate(0deg);
+    }
+    100% {
+      filter: invert(0) hue-rotate(360deg);
+    }
+  }
+  .hue-rotate-animation-white {
+    animation: hueRotateAnimationWhite 10s linear infinite, pulsate 3s ease-in-out infinite alternate; /* Animation for hue-rotate */
+  }
+  .hue-rotate-animation-white-pulsateLess {
+    animation: hueRotateAnimationWhite 10s linear infinite /* Animation for hue-rotate */
+  }
+  
+  @keyframes hueRotateAnimationWhite {
+    0% {
+      filter: invert(1) hue-rotate(0deg);
+    }
+    100% {
+      filter: invert(1) hue-rotate(360deg);
+    }
+  }
+
+  .myImages {
+    height: 100%;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #doodlesDiv img {
+    height: 100vh;
+    width: 100vw;
+    object-fit: contain;
+    display: block;
+  }
+  #balkanDiv img {
+    height: 100vh;
+    width: 100vw;
+    object-fit: contain;
+    display: block;
+  }
+  #sonnetsDiv img {
+    height: 100vh;
+    width: 100vw;
+    object-fit: contain;
+    display: block;
+  }
+
+  #imagesDiv {
+    height: 100%;
+    width: auto;
+    display: none;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+  }
+  #imagesDiv img {
+    height: 100vh;
+    width: 100vw;
+    object-fit: contain;
+    display: block;
+  }
+
+  #hiddenDiv img {
+    height: 100vh;
+    width: 100vw;
+    object-fit: contain;
+    display: block;
+    transition: 1s ease;
+    animation: hueRotation 20s linear infinite;
+    
+  }
+  
+  .sideControl {
+    opacity: 1;
+    display: block;
+    transition: 1s ease;
+    width: 33%;
+    height: 10%;
+    margin-left: 20%;
+    margin-top: 10%;
+  }
+
+
+  .topControl {
+    position: relative;
+    width: 14.25%;
+    height: 100%;
+    float: right
+  }     
+  #topControlsContainer {
+    position: absolute;
+    width: 100%;
+    height: 20px;
+    top: 5%
+  }
+
+
+
+#albumDivNavButtonLeft { 
+  position: absolute;           
+  width: 35px;
+  left: 0%;
+  top: 25%;
+  visibility: hidden;
+  transform: rotate(180deg);
+}    
+#albumDivNavButtonRight { 
+  position: absolute;           
+  width: 35px;
+  right: 0%;
+  top: 25%;  
+  visibility: hidden;
+  filter: brightness(0%);
+  transform: rotate(180deg);
+}
+
+
+
+  #optionsDiv img:hover{
+    opacity: 0.4
+
+  }
+
+  
+  
+
+  #aboutDiv {
+    height: 0%;
+    width: 0%;
+    visibility: hidden
+  }
+  #aboutTextDiv {
+    position: relative;
+    width: 100%;
+    height: 25%;
+    transition: 1s;
+    top: 5%;
+    left: 0%;
+    opacity: 0.5;
+    visibility: hidden;
+    color: white;
+    background-color: black;
+    text-shadow: 2px 2px 5px purple;
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: 70%;
+  }
+
+  /* #aboutTextDiv .text {
+  color: white;
+  background-color: black;
+  text-shadow: 2px 2px 5px purple;
+  font-family: "Lucida Console", "Courier New", monospace;
+  font-size: 70%;
+  }   */
+
+  .aboutText {
+    color: white;
+    background-color: black;
+    text-shadow: 2px 2px 5px purple;
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: 70%;
+    visibility: hidden;
+  }
+
+
+
+
+  #scrollContainer {
+    height: 65%;
+    width: 100%;
+    position: fixed;
+    top: 10%;
+    visibility: hidden
+  }
+#scrollContainer #habitatsScroll {
+  visibility: hidden;
+  position: relative;
+  height: 100%;
+  width: 700%
+}
+
+#travisImage {
+  visibility: hidden;
+  top: 40%;
+  width: 100px;
+  position:absolute;
+  transform:rotateY(180deg)
+} 
+  
+
+
+#albumTitlesDiv img:hover{
+        opacity: 0.5;
+      }  
+      
+
+      .songTitleImage {
+        position: relative;
+        display: block;
+        animation: pulsate 5s ease-in-out infinite alternate, hueRotation 7s linear infinite;
+      }
+      .songTitleImage:hover{
+        opacity: 0.5;
+      }
+      
+
+
+
+      #previousTrackArrow {
+        cursor: pointer;
+        position: absolute;
+        left: 0%;
+        top: 40%;
+        transform: rotate(180deg);
+        filter: hue-rotate(90deg);
+        width: 30px;
+      }
+      #previousTrackArrow:hover{
+        opacity:2
+      }
+
+      #nextTrackArrow {
+        cursor: pointer;
+        width: 30px;
+        position: absolute;
+        right: 0%;
+        top: 40%
+      }             
+
+      #backArrow {
+        cursor: pointer;
+        position: absolute;
+        top: 2%;
+        left: 2%;
+        width: 40px;
+        opacity:0;
+        visibility: hidden;
+        z-index: 99 ;      
+      }     
+      #backArrow:hover{
+        opacity:1
+      }
+
+      #sideControlsContainer {
+        position: absolute;
+        height: 70%;
+        right: 0%;
+        top: 15%;
+        transition: 1s ease-out;
+        width: 0%
+      }
+      
+      #sideControlsDiv {
+        position: relative;
+        width: 0%;
+        height: 100%;
+        top: 0%;
+        left: 100%;
+        z-index: 99;
+        transition: 1s ease-out;
+      }
+
+      .sideControl:hover{
+        opacity: 0.5
+      }
+
+      
+
+      #materialSwitch {
+        display: block;
+        transition: 1s ease;
+        width: 45%;
+        height: 10%;
+        margin-top: 10%;        
+        margin-left: 15%;
+        z-index: 99;
+        opacity: 1;
+      }
+
+      #materialSwitch:hover {
+        opacity: 0.5
+      }
+
+      #sideControlsNavButton {
+        width: 35px;
+        float: inline-end;
+        visibility: hidden;
+      }
+
+
+      
+
+
+
+      #fov {
+        cursor: pointer;
+        visibility: hidden;
+        position: absolute;
+        z-index: 98;
+        left: 25%;
+        height: 2px;
+        background: linear-gradient(to right, #c789eb, #054691);
+        outline: none;
+        opacity: .2;
+        -webkit-transition: 1s;
+        transition: 1s;
+        -webkit-appearance: none;
+        width: 50%;
+        top: 100%;
+      }
+  
+  #fov:hover {
+        opacity: 1;
+      }
+
+
+
+      .presetControl {
+        opacity: 0.5;
+        width: 7.2%;
+        padding-left: 3.5%;
+        padding-right: 3.5%;
+        padding-top: 5%;
+        float: right
+      }
+
+      .presetControl:hover {
+        opacity: 1
+      }
+
+      #seekbarContain {
+        position: fixed;
+        width: 90%;
+        left: 5%;
+        right: 5%;
+        height: 10%;
+        top: 90%;
+      }
+  
+      .seekbar {
+        cursor: pointer;
+        position: absolute;
+        z-index: 98;
+        height: 2px;
+        left: 7.5%;
+        top: 50%;
+        outline: none;
+        opacity: 0.2;
+        -webkit-transition: 1s;
+        transition: 1s;
+        width: 85%;
+      }
+     
+      .seekbar:hover {
+        opacity: 1;
+      }
+
+      
+
+
+
+
+
+

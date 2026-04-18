@@ -1,0 +1,629 @@
+    
+    
+    body {
+      background-color: #000000; 
+      overflow: hidden;
+    }
+
+    #rendererContain {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      margin: -8;
+      background-color: black;
+      background-size: 300px;
+    }
+        
+    @media (orientation: portrait) {   
+
+      #topControlsNavButton {
+        position: absolute;
+        filter: invert(1);
+        right: 12.5%;
+        width: 25px;
+        opacity: 0.5;
+        visibility: hidden;
+        
+      }
+
+      #circleBW {
+        position: absolute;
+        top: 5%;
+        right: 2%;
+        width: 20px;
+        visibility: hidden
+      }
+    
+      #centerContainer {
+        position: fixed;
+        height: 100%;
+        width: 20%;
+        transition: 0.5s;
+        top: 0%;
+        left: 40%;
+      }
+
+    #maapDiv {
+      display: block;
+      position: relative;
+      float: left;
+      width: 0%;
+      transition: 1s ease;
+
+    }
+    #maapDiv2 {
+      display: block;
+      position: relative;
+      float: right;
+      width: 0%;
+      transition: 1s ease;
+      top: 5%
+    }
+
+    #horseloverDiv {
+      display: block;
+      position: relative;
+      float: left;
+      width: 0%;
+      transition: 1s ease;
+
+    }
+    #horseloverDiv2 {
+      display: block;
+      position: relative;
+      float: right;
+      width: 0%;
+      transition: 1s ease;
+      top: 5%
+    }
+
+    #sapientsDiv {
+      display: block;
+      position: relative;
+      float: right;
+      width: 0%;
+      transition: 1s ease;
+      top: 25%
+    }
+
+    #sapientsDiv2 {
+      display: block;
+      position: relative;
+      float: right;
+      width: 0%;
+      transition: 1s ease;
+      top: 25%
+    }
+
+    #symbioseDiv {
+      display: block;
+      position: relative;
+      float: right;
+      width: 0%;
+      transition: 1s ease;
+      top: 10%;
+    }
+    #symbioseDiv2 {
+      display: block;
+      position: relative;
+      float: right;
+      width: 0%;
+      transition: 1s ease;
+      top: 15%;
+    }
+
+
+  #topControlsDiv {
+      position: relative;
+      width: 60%;
+      margin-left: 20%;
+      height: 0%;
+      top: -110%;
+      filter: contrast(200%);
+      transition: 1s;
+      visibility: hidden
+  }
+
+  
+  #presetControlsDiv {
+    width: 60%;
+    position: fixed;
+    left: 20%;
+    visibility: hidden;
+  }
+
+  #div2D3D {
+    position: relative;
+    width: 0%;
+    top: 40%;
+    transition: 1s;
+  }
+  #div2D3D img {
+    width: 50%;
+    left: 25%;
+    position: relative
+  }
+
+  }
+
+  @media (orientation: landscape) {   
+
+    #div2D3D {
+      position: relative;
+      width: 0%;
+      top: 40%;
+      transition: 1s;
+    }
+    #div2D3D img {
+      width: 50%;
+      left: 25%;
+      position: relative
+    }
+
+    #topControlsNavButton {
+      position: absolute;
+      filter: invert(1);
+      right: 25%;
+      width: 25px;
+      opacity: 0.5;
+      visibility: hidden;
+    }
+
+    #circleBW {
+      position: absolute;
+      top: 5%;
+      right: 2%;
+      width: 35px;
+      visibility: hidden
+    }
+    
+    #centerContainer {
+      position: fixed;
+      height: 100%;
+      width: 10%;
+      transition: 0.5s;
+      top: 0%;
+      left: 45%;
+    }
+    #maapDiv {
+      display: block;
+      position: relative;
+      float: right;
+      width: 0%;
+      transition: 1s ease;
+ 
+    }
+    #maapDiv2 {
+      display: block;
+      position: relative;
+      float: right;
+      width: 0%;
+      transition: 1s ease;
+      top:5%
+
+    }
+    #horseloverDiv {
+      display: block;
+      position: relative;
+      float: right;
+      width: 0%;
+      transition: 1s ease;
+ 
+    }
+    #horseloverDiv2 {
+      display: block;
+      position: relative;
+      float: right;
+      width: 0%;
+      transition: 1s ease;
+      top:5%
+
+    }
+
+    #sapientsDiv {
+      display: block;
+      position: relative;
+      float: right;
+      width: 0%;
+      transition: 1s ease;
+      top: 25%
+    }
+    #sapientsDiv2 {
+      display: block;
+      position: relative;
+      float: right;
+      width: 0%;
+      transition: 1s ease;
+      top: 25%
+    }
+    #symbioseDiv {
+      display: block;
+      position: relative;
+      float: right;
+      width: 0%;
+      transition: 1s ease;
+      top: 10%;
+      left: 10%
+    }
+    #symbioseDiv2 {
+      display: block;
+      position: relative;
+      float: right;
+      width: 0%;
+      transition: 1s ease;
+      top: 15%;
+      right: 10%
+    }
+
+
+  #topControlsDiv {
+      position: relative;
+      width: 30%;
+      margin-left: 35%;
+      height: 0%;
+      filter: contrast(200%);
+      top: -110%;
+      transition: 1s;
+      visibility: hidden
+  }
+
+  #presetControlsDiv {
+    width: 30%;
+    position: fixed;
+    left: 35%;
+    visibility: hidden;
+  }
+
+  }
+
+  
+  .sideControl {
+    opacity: 1;
+    display: block;
+    transition: 1s ease;
+    width: 33%;
+    height: 10%;
+    margin-left: 20%;
+    margin-top: 10%;
+  }
+
+
+  .topControl {
+    position: relative;
+    width: 14.25%;
+    height: 100%;
+    float: right
+  }     
+  #topControlsContainer {
+    position: relative;
+    width: 100%;
+    height: 5%;    
+}
+
+  /* .albumDivContainer {
+    position: fixed;
+    height: 75%;
+    width: 0%;
+    transition: 0.5s;
+    top: 12.5%;
+  } */
+  #albumDivsContainer {
+    position: fixed;
+    height: 75%;
+    width: 0px;
+    transition: 0.5s;
+    top: 12.5%;
+    left: 40px;
+    transition: 1s ease
+  }
+
+#albumDivsNavButtonLeft { 
+  position: absolute;           
+  width: 35px;
+  left: 0%;
+  top: 25%;
+  visibility: hidden;
+  transform: rotate(180deg);
+}    
+#albumDivsNavButtonRight { 
+  position: absolute;           
+  width: 35px;
+  right: 0%;
+  top: 25%;  
+  visibility: hidden;
+  filter: brightness(0%);
+  transform: rotate(180deg);
+}
+
+  #optionsDiv {
+    position: absolute;
+    height: 10%;
+    width: 100%;
+    transition: 1s;
+    top: 33%;
+    /* left: 25%; */
+  }
+
+  #optionsDiv img {
+    display: inline-block;
+    transition: 1s ease;
+    height: 50%;
+    width: 75%;
+    margin: 12.5%;
+    opacity: 1;
+  }
+
+  #optionsDiv img:hover{
+    opacity: 0.5
+  }
+
+  #aboutDiv {
+    position: absolute;
+    height: 200px;
+    width: 0%;
+    transition: 1s;
+    top: 33%;
+    left: -100%;
+    opacity: 0.5;
+    visibility: hidden
+  }
+
+  aboutText {
+    color: white;
+    background-color: black;
+    text-shadow: 2px 2px 5px purple;
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: 75%;
+  }
+
+
+#scrollContainer {
+  height: 75%;
+  width: 100%;
+  position: fixed;
+  top: 12.5%;
+  visibility: hidden
+
+}
+
+#scrollContainer #habitatsScroll {
+  visibility: hidden;
+  position: relative;
+  height: 100%;
+  width: 700%
+}
+
+#travisImage {
+  visibility: hidden;
+  top: 40%;
+  width: 100px;
+  position:absolute;
+  transform:rotateY(180deg)
+} 
+  
+     
+#albumsDiv {
+    position: absolute;
+    height: 33%;
+    width: 0%;
+    transition: 1s;
+    top: 33%;
+    float: right;
+    left: -25%;
+  }
+
+#albumsDiv img {
+  position: relative;
+  display: block;
+  transition: 1s ease;
+  height: 25%;
+  width: 100%;
+  float:right
+}     
+#albumsDiv img:hover{
+        opacity: 0.5;
+      }
+
+      
+
+      .maapTitleImage {
+        display: inline-block;
+        width: 100%;        
+        height:10%
+      }
+      .maapTitleImage:hover{
+        opacity: 0.5;
+      }
+
+      .horseloverTitleImage {
+        display: inline-block;
+        width: 100%;        
+        height:10%
+      }
+      .horseloverTitleImage:hover{
+        opacity: 0.5;
+      }
+
+      .sapientsTitleImage {
+        display: inline-block;
+        height: 10%;
+        margin-top:10%;
+        width: 100%
+      }  
+      .sapientsTitleImage:hover{
+        opacity: 0.5;
+      }
+
+      .symbioseTitleImage {
+        display: inline-block;
+        width: 100%;
+        margin-top:10%;        
+        height:10%
+      }
+      .symbioseTitleImage:hover{
+        opacity: 0.5;
+      }
+      
+
+
+
+      #previousTrackArrow {
+        cursor: pointer;
+        position: absolute;
+        left: 0%;
+        top: 30%;
+        transform: rotate(180deg);
+        filter: hue-rotate(90deg);
+        width: 30px;
+      }
+      #previousTrackArrow:hover{
+        opacity:2
+      }
+
+      #nextTrackArrow {
+        cursor: pointer;
+        width: 30px;
+        position: absolute;
+        right: 0%;
+        top: 30%
+      }  
+      
+      #pausePlay {
+        width: 33;
+        top: 90%;
+        position: absolute;
+        left: 33%;
+      }
+
+      #backArrow {
+        position: absolute;
+        top: 2%;
+        left: 2%;
+        width: 40px;
+        opacity:0;
+        visibility: hidden;
+        z-index: 99        
+      }     
+      #backArrow:hover{
+        opacity:1
+      }
+
+      #sideControlsContainer {
+        position: absolute;
+        height: 70%;
+        right: 0%;
+        top: 15%;
+        transition: 1s ease-out;
+        width: 0%
+      }
+      
+      #sideControlsDiv {
+        position: relative;
+        width: 0%;
+        height: 100%;
+        top: 0%;
+        left: 100%;
+        z-index: 99;
+        transition: 1s ease-out;
+      }
+
+      .sideControl:hover{
+        opacity: 0.5
+      }
+
+      
+
+      #materialSwitch {
+        display: block;
+        transition: 1s ease;
+        width: 45%;
+        height: 10%;
+        margin-top: 10%;        
+        margin-left: 15%;
+        z-index: 99;
+        opacity: 1;
+      }
+
+      #materialSwitch:hover {
+        opacity: 0.5
+      }
+
+      #sideControlsNavButton {
+        width: 35px;
+        float: inline-end;
+        visibility: hidden;
+      }
+
+
+      
+
+
+
+      #fov {
+        position: absolute;
+        z-index: 98;
+        left: 25%;
+        height: 0.5%;
+        background: linear-gradient(to right, #94bd3a, #008062);
+        top: 45%;
+        outline: none;
+        opacity: .5;
+        -webkit-transition: 1s;
+        transition: 1s;
+        -webkit-appearance: none;
+        width: auto;
+        transform: rotate(90deg);
+      }
+  
+  #fov:hover {
+        opacity: 1;
+      }
+
+
+
+      .presetControl {
+        opacity: 0.5;
+        width: 7.2%;
+        padding-left: 3.5%;
+        padding-right: 3.5%;
+        padding-top: 5%;
+        float: right
+      }
+
+      .presetControl:hover {
+        opacity: 1
+      }
+
+      #seekbarContain {
+        position: fixed;
+        width: 90%;
+        left: 5%;
+        right: 5%;
+        height: 10%;
+        top: 90%;
+      }
+  
+      .seekbar {
+        position: absolute;
+        z-index: 98;
+        height: 2px;
+        left: 7.5%;
+        top: 50%;
+        outline: none;
+        opacity: 0.2;
+        -webkit-transition: 1s;
+        transition: 1s;
+        width: 85%;
+      }
+     
+      .seekbar:hover {
+        opacity: 1;
+      }
+        
+
+
+
+
+
+

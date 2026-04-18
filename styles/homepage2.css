@@ -1,0 +1,95 @@
+    
+    
+    body {
+      background-color: #000000; 
+      overflow: hidden;
+    }
+
+    #rendererContain {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      margin: -8;
+      background-color: black
+    }
+        #navigationContainer {
+          position: fixed;
+          height: 75%;
+          width: 0%;
+          transition: 0.5s;
+          top: 12.5%;
+        }
+      #navigationDiv {
+        position: relative;
+        height: 100%;
+        width: 200px;
+        margin-left: 0%;
+        transition: 1s;
+        top: 0%;
+      }
+
+     #navigationDiv img {
+        display: block;
+        transition: 1s ease;
+        height: 10%;
+        width: 70%;
+        margin-left: 25%
+      }
+
+      #albumContainer {
+        position: fixed;
+        height: 75%;
+        width: 0%;
+        transition: 0.5s;
+        top: 12.5%;
+        right: 0%;
+        float:right     
+      }
+
+    #albumsDiv {
+      visibility: hidden;
+      position: relative;
+      height: 100%;
+      width: 0%;
+      margin-left: 0%;
+      transition: 1s;
+      top: 0%;    
+      float: right              
+      }
+
+     #albumsDiv .albumTitleImage {
+      display: block;
+      transition: 1s ease;
+      height: 10%;
+      width: 70%;
+      margin-right: 25%
+      }
+      #fov {
+        position: absolute;
+        z-index: 98;
+        left: -25%;
+        height: 0.5%;
+        background: linear-gradient(to right, #94bd3a, #008062);
+        top: 45%;
+        outline: none;
+        opacity: .5;
+        -webkit-transition: 1s;
+        transition: 1s;
+        -webkit-appearance: none;
+        margin-left: 50px;
+        width: 200%;
+        transform: rotate(90deg);
+      }
+  
+  #fov:hover {
+        opacity: 1;
+      }
+
+
+
+
+
+
+
+

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>travis fisher</title>
+
+<link rel="icon" type="image/png" href="images/background-icon.png">
+<link rel="apple-touch-icon" href="images/background-icon.png">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<style>
+:root{
+  --bg:#0f0f0f;
+  --ink:#f3efe8;
+  --muted:#bdb8ae;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+}
+
+a{
+  color:var(--muted);
+  text-decoration:none;
+}
+a:hover{color:var(--ink);text-decoration:underline}
+
+.pdf-link::after{
+  content:"↗";
+  font-size:.7em;
+  margin-left:6px;
+  opacity:.6;
+}
+
+/* views */
+.view{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .5s ease;
+}
+.view.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* home */
+.home{display:flex;align-items:center;overflow:hidden}
+.home-inner{padding:24px;transition:.6s}
+.home-inner.hidden{transform:translateX(-60px);opacity:0}
+
+@keyframes logoHue{
+  from{filter:hue-rotate(0deg)}
+  to{filter:hue-rotate(360deg)}
+}
+.logo{
+  width: clamp(40px, 24vw, 80px);
+  margin-bottom: 20px;
+  animation: logoHue 20s linear infinite;
+  filter:saturate(85%)
+}
+
+.name{font-size:1.05rem;color:var(--muted);margin-bottom:4px}
+.subtitle{font-size:.8rem;color:var(--muted);margin-bottom:64px}
+
+.menu{display:flex;flex-direction:column;gap:16px}
+.menu button{
+  background:none;border:none;color:var(--ink);
+  font-size:1.05rem;text-align:left;cursor:pointer;
+}
+
+/* back */
+.back{
+  position:fixed;top:18px;left:18px;
+  background:none;border:none;color:var(--ink);
+  font-size:1.3rem;cursor:pointer;z-index:20;
+}
+.back::before{content:"←"}
+
+section{
+  max-width:760px;
+  padding:120px 24px 80px;
+}
+
+/* compositions */
+#compositions{overflow-y:auto}
+
+.composition{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:.88rem;
+  margin-bottom:22px;
+}
+
+
+
+.composition.playing .composition-title{
+  font-style: italic;
+  color: hsla(190, 50%, 50%, 0.9); /* soft, desaturated cyan */
+  animation: titlePulse 9s ease-in-out infinite, logoHue 40s linear infinite;
+}
+
+@keyframes titlePulse{
+  0%,100%{opacity:.7}
+  50%{opacity:1}
+  
+}
+
+.composition-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:210px;        /* FIXED WIDTH = alignment */
+  justify-content:flex-end;
+}
+
+.play{background:none;border:none;cursor:pointer;color:var(--ink)}
+.play svg{width:18px;height:18px}
+.play .triangle{fill:none;stroke:currentColor;stroke-width:2}
+.play.playing .triangle{fill:currentColor;stroke:none}
+
+.seek{
+  width:90px;height:5px;background:#333;
+  border-radius:2px;overflow:hidden;cursor:pointer;
+}
+.seek-fill{
+  height:100%;width:0%;
+  animation:logoHue 20s linear infinite;
+  background:hsla(190, 50%, 50%, 0.9);
+}
+
+.score-btn{
+  width:48px;               /* RESERVED SPACE */
+  text-align:center;
+  background:none;
+  border:1px solid var(--muted);
+  color:var(--ink);
+  font-size:.75rem;
+  padding:3px 0;
+}
+
+/* hide scrollbar visually */
+#compositions::-webkit-scrollbar,
+.schedule-events::-webkit-scrollbar{
+  width:0;height:0;
+}
+
+/* score overlay */
+.score-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(15,15,15,.96);
+  opacity:0;
+  pointer-events:none;
+  transition:.4s;
+  z-index:30;
+}
+.score-overlay.active{
+  opacity:1;
+  pointer-events:auto;
+}
+.score-close{
+  position:absolute;top:16px;right:16px;
+  background:none;border:none;
+  color:var(--ink);font-size:1.4rem;cursor:pointer;
+  z-index: 40;
+}
+
+.score-overlay.closing{
+  opacity:0;
+  pointer-events:none;
+}
+.score-gallery{
+  position:absolute;inset:0;
+  display:flex;gap:32px;
+  padding:72px 24px 24px;
+  overflow-x:auto;scroll-snap-type:x mandatory;
+}
+.score-page{scroll-snap-align:center}
+.score-page canvas{max-width:100vw;height:auto}
+
+/* schedule */
+.schedule-wrap{
+  position:relative;
+  height:100%;
+}
+.schedule-events{
+  position:absolute;
+  top:120px;
+  bottom:64px;
+  left:0;right:0;
+  overflow-y:auto;
+  padding:0 24px;
+}
+.event{margin-bottom:36px}
+.event strong{display:block;font-size:1rem;margin-bottom:4px}
+.event .time{font-size:.85rem;color:var(--muted);margin-bottom:4px}
+.event .with{font-size:.8rem;color:var(--muted)}
+
+.schedule-booking{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:14px 24px;
+  font-size:.75rem;
+  color:var(--muted);
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+/* about */
+#about{
+  overflow:hidden;
+}
+
+.about-wrap{
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-end; /* pushes content toward bottom */
+  justify-content: flex-start; /* stays left aligned */
+  padding-bottom: 100px; /* optional extra spacing from bottom */
+}
+
+.about-track{
+  position:absolute;
+  inset:0;
+  height:100vh;
+
+  background-image: url('images/about-background.jpg');
+  background-repeat: repeat-x;
+  background-position: 0 center;
+
+  /* This is the magic combo */
+  background-size: auto 100%; /* ← tune height here */
+
+  animation: aboutPan 15s linear infinite;
+  opacity: .6;
+  will-change: background-position;
+}
+
+@keyframes aboutPan{
+  from{
+    background-position-x: 0;
+  }
+  to{
+    background-position-x: 100%;
+  }
+}
+.about-text{
+  position:relative;z-index:2;
+  max-width:500px;
+  padding: 0 24px 0;
+}
+
+.about-text p:last-child {
+  margin-top: 60px;
+  font-size: 0.85em;
+  color: #fff;
+}
+
+/* simple lists */
+.simple-list{font-size:.85rem;line-height:1.6}
+.simple-list div{margin-bottom:10px}
+
+
+@media (min-width: 1000px){
+  .composition{
+    justify-content:space-between;
+  }
+
+  .controls{
+    width:560px;
+    justify-content:flex-start;
+    gap:14px;
+  }
+
+  .seek{
+    width:420px;
+    height:5px;
+  }
+
+
+}
+
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home" class="view active home">
+  <div id="homeInner" class="home-inner">
+    <img class="logo" src="images/background-icon.png">
+    <div class="name">travis fisher</div>
+    <div class="subtitle">pianist / composer</div>
+    <div class="menu">
+      <button onclick="openSection('compositions')">compositions</button>
+      <button onclick="openSection('experimental')">experimental works</button>
+      <!-- <button onclick="openSection('arrangements')">arrangements</button> -->
+      <button onclick="openSection('lessons')">lessons</button>
+      <button onclick="openSection('schedule')">schedule</button>
+      <button onclick="openSection('donate')">donate</button>
+      <button onclick="openSection('about')">about</button>
+
+    </div>
+  </div>
+</div>
+
+<!-- COMPOSITIONS -->
+<div id="compositions" class="view">
+  <button class="back" onclick="goHome()"></button>
+  <section id="compositionList"></section>
+</div>
+
+<!-- ARRANGEMENTS
+<div id="arrangements" class="view">
+  <button class="back" onclick="goHome()"></button>
+  <section class="simple-list">
+  <div>
+    <a class="pdf-link" href="scores/arrangements/pure-imagination-lead-sheet.pdf" target="_blank">
+      <strong>bricusse/newley</strong> — <em>pure imagination</em>
+    </a>
+  </div>
+</section>
+</div> -->
+
+<!-- LESSONS -->
+<div id="lessons" class="view">
+  <button class="back" onclick="goHome()"></button>
+  <section class="simple-list">
+    <div>
+    <a class="pdf-link" href="scores/lessons/the-chromatic-scale-beginner.pdf" target="_blank">
+      the chromatic scale (beginner exercise)
+    </a>
+  </div>
+  <div>
+    <a class="pdf-link" href="scores/lessons/visualizing-the-grand-staff.pdf" target="_blank">
+      visualizing the grand staff
+    </a>
+  </div>
+   <div>
+    <a class="pdf-link" href="scores/lessons/learning-the-circle-of-fifths-beginner.pdf" target="_blank">
+      learning the circle of fifths
+    </a>
+  </div>
+  <div>
+    <a class="pdf-link" href="scores/lessons/ii-V-i-voicing.pdf" target="_blank">
+      ii-V-i voicing
+    </a>
+  </div>
+  <div>
+    <a class="pdf-link" href="scores/lessons/chromatic-scale-with-aug-or-dim7-chord.pdf" target="_blank">
+      chromatic scale against augmented or diminished 7th chord (3:4 polyrhythm exercise)
+    </a>
+  </div>
+  <div>
+    <a class="pdf-link" href="scores/lessons/dominant13th-voicings.pdf" target="_blank">
+      dominant 13th voicings
+    </a>
+  </div>
+  <div>
+    <a class="pdf-link" href="scores/lessons/lydian-dominant-exploration-no-1.pdf" target="_blank">
+      lydian dominant exploration no. 1
+    </a>
+  </div>
+</section>
+  <div class="schedule-booking">
+    for all lesson inquiries contact
+    <a href="mailto:lessons@travisfishermusic.com">lessons@travisfishermusic.com</a>
+  </div>
+</div>
+
+<!-- SCHEDULE -->
+<div id="schedule" class="view">
+  <button class="back" onclick="goHome()"></button>
+  <div class="schedule-wrap">
+    <div class="schedule-events">
+
+      <!-- JUNE -->
+      <div class="event"><strong>jun 5</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+      <div class="event"><strong>jun 12</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+      <div class="event"><strong>jun 17</strong><div class="time">12–4pm</div>mountain village core</div>
+      <div class="event"><strong>jun 19</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+      <div class="event"><strong>jun 26</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+
+      <!-- JULY -->
+      <div class="event"><strong>jul 3</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+      <div class="event"><strong>jul 10</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+      <div class="event"><strong>jul 17</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+      <div class="event"><strong>jul 19</strong><div class="time">5–7pm</div>sunset plaza, mtn village</div>
+      <div class="event"><strong>jul 22</strong><div class="time">12–4pm</div>mountain village core</div>
+      <div class="event"><strong>jul 23</strong><div class="time">6pm</div>norwood livery</div>
+      <div class="event"><strong>jul 24</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+      <div class="event"><strong>jul 31</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+
+      <!-- AUGUST -->
+      <div class="event"><strong>aug 2</strong><div class="time">1–5pm</div>mountain village core</div>
+      <div class="event"><strong>aug 7</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+      <div class="event"><strong>aug 13</strong><div class="time">6pm</div>telluride science center</div>
+      <div class="event"><strong>aug 14</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+      <div class="event"><strong>aug 21</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+      <div class="event"><strong>aug 27</strong><div class="time">6pm</div>norwood livery</div>
+
+      <!-- SEPTEMBER -->
+      <div class="event"><strong>sep 11</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+      <div class="event"><strong>sep 18</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+      <div class="event"><strong>sep 19</strong><div class="time">6pm</div>telluride science center</div>
+      <div class="event"><strong>sep 25</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+
+      <!-- OCTOBER -->
+      <div class="event"><strong>oct 2</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+      <div class="event"><strong>oct 3</strong><div class="time">1–5pm</div>mountain village core</div>
+      <div class="event"><strong>oct 9</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+      <div class="event"><strong>oct 16</strong><div class="time">5–8pm</div>alloy ranch, mtn village</div>
+
+    </div>
+
+    <div class="schedule-booking">
+      booking inquiries:
+      <a href="mailto:booking@travisfishermusic.com">booking@travisfishermusic.com</a>
+    </div>
+  </div>
+</div>
+
+<!-- DONATE -->
+<div id="donate" class="view">
+  <button class="back" onclick="goHome()"></button>
+  <section style="font-size:.85rem;line-height:1.7">
+    <p>
+      if you find the scores, recordings, or materials here valuable,
+      any donation is sincerely appreciated
+    </p>
+    <p>
+      <a href="https://venmo.com/travisafish" target="_blank">donate via venmo</a>
+    </p>
+  </section>
+</div>
+
+<!-- ABOUT -->
+<div id="about" class="view">
+  <button class="back" onclick="goHome()"></button>
+  <div class="about-wrap">
+    <div class="about-text">
+      <p>travis fisher is a pianist, multi-instrumentalist, and composer based in telluride, colorado.</p>
+<p>he studied classical piano in los angeles and jazz piano in seattle.</p>
+      <p></p>
+      <p></p>
+      <p>hello@travisfishermusic.com</p>
+    </div>
+<div class="about-track">
+
+</div>
+</div>
+
+<!-- SCORE -->
+<div id="scoreOverlay" class="score-overlay">
+  <button class="score-close" onclick="closeScore()">×</button>
+  <div id="scoreGallery" class="score-gallery"></div>
+</div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc=
+'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const scoreOverlay = document.getElementById('scoreOverlay');
+const scoreGallery = document.getElementById('scoreGallery');
+const home = document.getElementById('home');
+const homeInner = document.getElementById('homeInner');
+
+let currentAudio=null,currentBtn=null;
+const playState={};
+
+function openSection(id){
+
+    // special external redirect
+if (id === 'experimental') {
+  const w = window.open("https://trafisvisher.github.io", "_blank");
+  if (w) w.focus();
+  return;
+}
+
+  homeInner.classList.add('hidden');
+  setTimeout(()=>{
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  },500);
+}
+function goHome(){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  home.classList.add('active');
+  homeInner.classList.remove('hidden');
+}
+
+function togglePlay(btn,src,key){
+  if(currentAudio && currentBtn !== btn){
+  playState[currentBtn.dataset.key] = currentAudio.currentTime;
+  currentAudio.pause();
+  currentBtn.classList.remove('playing');
+  currentBtn.closest('.composition').classList.remove('playing');
+}
+  if(!btn.classList.contains('playing')){
+    currentAudio=new Audio(src);
+    currentAudio.currentTime=playState[key]||0;
+    currentAudio.volume=.85;
+    currentAudio.play();
+    btn.classList.add('playing');
+    btn.closest('.composition').classList.add('playing');
+    currentBtn=btn;
+
+    currentAudio.ontimeupdate=()=>{
+      const fill=btn.parentElement.querySelector('.seek-fill');
+      if(fill) fill.style.width=
+        (currentAudio.currentTime/currentAudio.duration*100)+'%';
+    };
+    currentAudio.onended=()=>{
+      btn.classList.remove('playing');
+      playState[key]=0;
+      btn.closest('.composition').classList.remove('playing');
+      btn.closest('.composition')
+        .nextElementSibling?.querySelector('.play')?.click();
+    };
+  }else{
+    playState[key]=currentAudio.currentTime;
+    currentAudio.pause();
+    btn.classList.remove('playing');
+    btn.closest('.composition').classList.remove('playing');
+  }
+}
+
+async function buildCompositions(){
+  const titles=[
+    'microrecia','hypnostadia','liminetica',
+    'nyxophonia','katharia','kyklopalma',
+    'aphasia','interstitia','antechronia'
+  ];
+  const list=document.getElementById('compositionList');
+
+  for(const t of titles){
+    const c=document.createElement('div');
+    c.className='composition';
+
+    const title=document.createElement('div');
+    title.className='composition-title';
+
+   const dl=document.createElement('button');
+dl.textContent='↓';
+dl.style.background='none';
+dl.style.border='none';
+dl.style.color='var(--muted)';
+dl.style.cursor='pointer';
+dl.onclick=()=>downloadFile(`songs/${t}.mp3`);
+
+    title.append(dl,document.createTextNode(t));
+
+    const ctr=document.createElement('div');
+    ctr.className='controls';
+
+    const p=document.createElement('button');
+    p.className='play';
+    p.dataset.key=t;
+    p.innerHTML=
+      `<svg viewBox="0 0 24 24">
+        <polygon class="triangle" points="6,4 20,12 6,20"/>
+       </svg>`;
+    p.onclick=()=>togglePlay(p,`songs/${t}.mp3`,t);
+
+    const seek=document.createElement('div');
+    seek.className='seek';
+    seek.innerHTML=`<div class="seek-fill"></div>`;
+    seek.onclick=e=>{
+      if(currentAudio){
+        const r=seek.getBoundingClientRect();
+        currentAudio.currentTime=
+          ((e.clientX-r.left)/r.width)*currentAudio.duration;
+      }
+    };
+
+    const scoreSlot=document.createElement('div');
+    scoreSlot.style.width='48px';
+
+    try{
+      const r=await fetch(`scores/compositions/${t}.pdf`,{method:'HEAD'});
+      if(r.ok){
+        const s=document.createElement('button');
+        s.className='score-btn';
+        s.textContent='score';
+        s.onclick=()=>openScore(t);
+        scoreSlot.appendChild(s);
+      }
+    }catch{}
+
+    ctr.append(p,seek,scoreSlot);
+    c.append(title,ctr);
+    list.appendChild(c);
+  }
+}
+
+function downloadFile(url){
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = url.split('/').pop();
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+async function openScore(title){
+  document.querySelectorAll('.back').forEach(b=>b.style.display='none');
+  scoreGallery.innerHTML='';
+  const pdf=await pdfjsLib.getDocument(`scores/compositions/${title}.pdf`).promise;
+  for(let i=1;i<=pdf.numPages;i++){
+    const page=await pdf.getPage(i);
+    const vp=page.getViewport({scale:1.6});
+    const canvas=document.createElement('canvas');
+    canvas.width=vp.width;canvas.height=vp.height;
+    await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;
+    const wrap=document.createElement('div');
+    wrap.className='score-page';
+    wrap.appendChild(canvas);
+    scoreGallery.appendChild(wrap);
+  }
+  scoreOverlay.classList.add('active');
+}
+function closeScore(){
+  scoreOverlay.classList.add('closing');
+
+  setTimeout(()=>{
+    scoreOverlay.classList.remove('active','closing');
+    scoreGallery.innerHTML='';
+    document.querySelectorAll('.back').forEach(
+      b => b.style.display = ''
+    );
+  }, 400); // matches CSS transition
+}
+
+buildCompositions();
+</script>
+</body>
+</html>
