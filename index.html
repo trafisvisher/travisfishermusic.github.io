@@ -78,6 +78,12 @@ a:hover{color:var(--ink);text-decoration:underline}
   font-size:1.05rem;text-align:left;cursor:pointer;
 }
 
+.ext-icon {
+  margin-left: 0.3em;
+  vertical-align: baseline;
+  opacity: 0.7;
+}
+
 /* back */
 .back{
   position:fixed;top:18px;left:18px;
@@ -223,43 +229,34 @@ section{
 }
 
 /* about */
-#about{
-  overflow:hidden;
-}
-
-.about-wrap{
-  position: relative;
-  min-height: 100vh;
+.about-wrap {
   display: flex;
-  align-items: flex-end; /* pushes content toward bottom */
-  justify-content: flex-start; /* stays left aligned */
-  padding-bottom: 100px; /* optional extra spacing from bottom */
+  flex-direction: column;   /* phones: photo on top, text below */
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+  min-height: 100vh;
+  min-height: 100dvh;        
+  justify-content: center;   
+  align-items: center;       
 }
 
-.about-track{
-  position:absolute;
-  inset:0;
-  height:100vh;
 
-  background-image: url('images/about-background.jpg');
-  background-repeat: repeat-x;
-  background-position: 0 center;
-
-  /* This is the magic combo */
-  background-size: auto 100%; /* ← tune height here */
-
-  animation: aboutPan 15s linear infinite;
-  opacity: .6;
-  will-change: background-position;
+.about-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
 }
 
-@keyframes aboutPan{
-  from{
-    background-position-x: 0;
+@media (min-width: 700px) {
+  .about-wrap {
+    flex-direction: row;    /* wider screens: side by side */
+    gap: 3rem;
   }
-  to{
-    background-position-x: 100%;
-  }
+  .about-photo { flex: 1.3; }
+  .about-text  { flex: 1; }
 }
 .about-text{
   position:relative;z-index:2;
@@ -308,8 +305,17 @@ section{
     <div class="name">travis fisher</div>
     <div class="subtitle">pianist / composer</div>
     <div class="menu">
-      <button onclick="openSection('compositions')">compositions</button>
-      <button onclick="openSection('experimental')">experimental works</button>
+      <button onclick="openSection('compositions')">compositions for solo piano</button>
+      <button onclick="openSection('experimental')">
+  experimental works
+  <svg class="ext-icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"
+       fill="none" stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+    <polyline points="15 3 21 3 21 9"/>
+    <line x1="10" y1="14" x2="21" y2="3"/>
+  </svg>
+</button>
       <!-- <button onclick="openSection('arrangements')">arrangements</button> -->
       <button onclick="openSection('lessons')">lessons</button>
       <button onclick="openSection('schedule')">schedule</button>
@@ -391,24 +397,26 @@ section{
     <div class="schedule-events">
 
       <!-- NOVEMBER -->
-      <div class="event"><strong>fri nov 27</strong><div class="time">4–7pm</div><div class="location">alloy ranch, mountain village</div></div>
+      <!-- <div class="event"><strong>fri nov 27</strong><div class="time">4–7pm</div><div class="location">alloy ranch, mountain village</div></div> -->
 
       <!-- DECEMBER -->
-      <div class="event"><strong>sat dec 5</strong><div class="time">4–7pm</div><div class="location">alloy ranch, mountain village</div></div>
+      <!-- <div class="event"><strong>sat dec 5</strong><div class="time">4–7pm</div><div class="location">alloy ranch, mountain village</div></div> -->
 
       <!-- JANUARY -->
-      <div class="event"><strong>sat jan 2</strong><div class="time">4–7pm</div><div class="location">alloy ranch, mountain village</div></div>
+       <div class="event"><strong>tues jan 4</strong><div class="time">6pm</div><div class="location">SHOW bar, telluride</div></div>
+      <!-- <div class="event"><strong>sat jan 2</strong><div class="time">4–7pm</div><div class="location">alloy ranch, mountain village</div></div>
       <div class="event"><strong>sat jan 9</strong><div class="time">4–7pm</div><div class="location">alloy ranch, mountain village</div></div>
-      <div class="event"><strong>fri jan 29</strong><div class="time">4–7pm</div><div class="location">alloy ranch, mountain village</div></div>
+      <div class="event"><strong>fri jan 29</strong><div class="time">4–7pm</div><div class="location">alloy ranch, mountain village</div></div> -->
 
       <!-- FEBRUARY -->
-      <div class="event"><strong>sat feb 13</strong><div class="time">4–7pm</div><div class="location">alloy ranch, mountain village</div></div>
+      <!-- <div class="event"><strong>sat feb 13</strong><div class="time">4–7pm</div><div class="location">alloy ranch, mountain village</div></div> -->
 
       <!-- MARCH -->
-      <div class="event"><strong>sat mar 27</strong><div class="time">4–7pm</div><div class="location">alloy ranch, mountain village</div></div>
-
+      <div class="event"><strong>fri mar 12</strong><div class="time">3pm</div><div class="location">"tips up friyay" -- mountain village</div></div>
+      <!-- <div class="event"><strong>sat mar 27</strong><div class="time">4–7pm</div><div class="location">alloy ranch, mountain village</div></div> -->
+      
       <!-- APRIL -->
-      <div class="event"><strong>fri apr 2</strong><div class="time">4–7pm</div><div class="location">alloy ranch, mountain village</div></div>
+      <!-- <div class="event"><strong>fri apr 2</strong><div class="time">4–7pm</div><div class="location">alloy ranch, mountain village</div></div> -->
 
     </div>
     <div class="schedule-booking">
@@ -436,17 +444,22 @@ section{
 <div id="about" class="view">
   <button class="back" onclick="goHome()"></button>
   <div class="about-wrap">
+    <div class="about-photo">
+      <img
+        src="images/bio-photo-web.jpg"
+        srcset="images/bio-photo-mobile.jpg 800w, images/bio-photo-web.jpg 1492w"
+        sizes="(max-width: 700px) 100vw, 50vw"
+        width="1492" height="1054"
+        alt="bio-photo"
+        loading="lazy"
+        decoding="async">
+    </div>
     <div class="about-text">
-      <p>travis fisher is a pianist, multi-instrumentalist, and composer based in telluride, colorado</p>
-<p>he studied classical piano in los angeles and jazz piano in seattle</p>
-      <p></p>
-      <p></p>
+      <p>travis fisher is a pianist, vocalist, and composer based in telluride, colorado</p>
+      <p>he studied classical piano in los angeles and jazz piano in seattle</p>
       <p>hello@travisfishermusic.com</p>
     </div>
-<div class="about-track">
-
-</div>
-</div>
+  </div>
 </div>
 
 <!-- SCORE -->
